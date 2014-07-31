@@ -1,16 +1,14 @@
-import org.apache.commons.lang.RandomStringUtils
-
 import com.infinum.txexamples.Datum
+import com.infinum.txexamples.RandomService
 
 class BootStrap {
-	private static final int randomStringLength = 16
-	private static final String charset = (('a'..'z') + ('A'..'Z') + ('0'..'9')).join()
+	
+	RandomService randomService
 	
     def init = { servletContext ->
 		if(Datum.count() == 0){
 			(0..50000).each{
-				String randomString = RandomStringUtils.random(randomStringLength, charset.toCharArray())
-				if(!new Datum(randValue:randomString).save()){
+				if(!new Datum(randValue:randomService.generateRandom()).save()){
 					log.error("Failed to save Datum")
 				}
 				
