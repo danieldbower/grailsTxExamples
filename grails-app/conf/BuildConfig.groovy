@@ -1,9 +1,10 @@
 grails.servlet.version = "2.5" // Change depending on target container compliance (2.5 or 3.0)
-grails.project.class.dir = "target/classes"
-grails.project.test.class.dir = "target/test-classes"
-grails.project.test.reports.dir = "target/test-reports"
-grails.project.target.level = 1.6
-grails.project.source.level = 1.6
+grails.project.work.dir = 'target'
+//grails.project.class.dir = "target/classes"
+//grails.project.test.class.dir = "target/test-classes"
+//grails.project.test.reports.dir = "target/test-reports"
+grails.project.target.level = 1.7
+grails.project.source.level = 1.7
 //grails.project.war.file = "target/${appName}-${appVersion}.war"
 
 // uncomment (and adjust settings) to fork the JVM to isolate classpaths
@@ -41,13 +42,15 @@ grails.project.dependency.resolution = {
     dependencies {
         // specify dependencies here under either 'build', 'compile', 'runtime', 'test' or 'provided' scopes e.g.
 
-        // runtime 'mysql:mysql-connector-java:5.1.22'
+        runtime 'mysql:mysql-connector-java:5.1.22'
+		runtime 'net.sourceforge.jtds:jtds:1.2.4'
+		runtime 'postgresql:postgresql:9.1-901.jdbc4'
     }
 
     plugins {
         runtime ":hibernate:$grailsVersion"
-        runtime ":jquery:1.8.3"
-        runtime ":resources:1.2"
+        runtime ":jquery:1.10.2"
+        runtime ":resources:1.2.7"
 
         // Uncomment these (or add new ones) to enable additional resources capabilities
         //runtime ":zipped-resources:1.0"
@@ -59,5 +62,23 @@ grails.project.dependency.resolution = {
         runtime ":database-migration:1.3.2"
 
         compile ':cache:1.0.1'
+
+
+		provided(":codenarc:0.20"){
+			exclude "junit"
+		}
+		
     }
+}
+
+codenarc.ruleSetFiles="file:grails-app/conf/CodeNarcRules.groovy"
+codenarc.processTestUnit=false
+codenarc.processTestIntegration=false
+codenarc.reports = {
+	xmlReport('xml') {
+		outputFile = 'target/CodeNarc-Report.xml'
+	}
+	htmlReport('html') {
+		outputFile = 'target/CodeNarc-Report.html'
+	}
 }
